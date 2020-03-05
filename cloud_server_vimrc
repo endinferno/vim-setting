@@ -1,29 +1,53 @@
+if has("termguicolors")
+	set termguicolors
+endif
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tell-k/vim-autopep8'
 Plug 'scrooloose/nerdcommenter'
+Plug 'luochen1990/rainbow'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'mkitt/tabline.vim'
 Plug 'tpope/vim-surround'
 Plug 'wakatime/vim-wakatime'
+Plug 'Yggdroot/indentLine'
 
-Plug 'morhetz/gruvbox'
+Plug 'camspiers/lens.vim'
+Plug 'camspiers/animate.vim'
+
 Plug 'itchyny/vim-cursorword'
 Plug 'sheerun/vim-polyglot'
-Plug 'othree/xml.vim'
 Plug 'Chiel92/vim-autoformat'
+Plug 'othree/xml.vim'
+
+Plug 'morhetz/gruvbox'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'rakr/vim-one'
 call plug#end()
+" indentLine
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
-au BufWrite * :Autoformat
+" animate
+let g:animate#distribute_space = 0
+let g:animate#duration = 300.0
+let g:animate#easing_func = 'animate#ease_out_cubic'
+nnoremap <silent> <Up>    :call animate#window_delta_height(5)<CR>
+nnoremap <silent> <Down>  :call animate#window_delta_height(-5)<CR>
+nnoremap <silent> <Left>  :call animate#window_delta_width(10)<CR>
+nnoremap <silent> <Right> :call animate#window_delta_width(-10)<CR>
+let g:animate#easing_func = 'animate#ease_linear'
 
-hi TabLine      ctermfg=Black  ctermbg=Green     cterm=NONE
-hi TabLineFill  ctermfg=Black  ctermbg=Green     cterm=NONE
-hi TabLineSel   ctermfg=White  ctermbg=DarkBlue  cterm=NONE
-let g:tablineclosebutton=1
+
+" lens
+let g:lens#disabled_filetypes = ['nerdtree', 'fzf']
+let g:lens#animate = 0
+let g:lens#height_resize_max = 20
+let g:lens#height_resize_min = 5
+let g:lens#width_resize_max = 80
+let g:lens#width_resize_min = 20
+
+"au BufWrite * :Autoformat
 
 filetype on
 filetype plugin on
@@ -59,6 +83,10 @@ map <leader>w :w<CR>
 
 
 " set foldmethod=indent
+set lazyredraw
+set ttyfast
+set autoread
+set cmdheight=1
 set nocompatible
 "显示行号"
 set number
@@ -113,22 +141,6 @@ set whichwrap+=<,>,h,l
 set autoread
 set cursorline      "突出显示当前行"
 set cursorcolumn        "突出显示当前列"
-
-
-
-map <F5> :Autopep8<CR> :w<CR> :call RunPython()<CR>
-function RunPython()
-	let mp = &makeprg
-	let ef = &errorformat
-	let exeFile = expand("%:t")
-	setlocal makeprg=python\ -u
-	set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-	silent make %
-	copen
-	let &makeprg = mp
-	let &errorformat = ef
-endfunction
-
 
 "###################    set file head start  #########################
 "autocmd创建新文件自动调用setfilehead()函数
